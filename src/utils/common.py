@@ -4,7 +4,7 @@ import logging
 import time
 import pandas as pd
 import json
-
+from zipfile import ZipFile
 def read_yaml(path_to_yaml: str) -> dict:
     with open(path_to_yaml) as yaml_file:
         content = yaml.safe_load(yaml_file)
@@ -16,7 +16,12 @@ def create_directories(path_to_directories: list) -> None:
         os.makedirs(path, exist_ok=True)
         logging.info(f"created directory at: {path}")
 
+def unzip_file(source:str, dest:str)->None:
+    logging.info(f"Extraction Started .......")
+    with ZipFile(source,"r") as zip_f:
 
+        zip_f.extractall(dest)
+    logging.info(f"Extracted {source} to {dest}")
 def save_json(path: str, data: dict) -> None:
     with open(path, "w") as f:
         json.dump(data, f, indent=4)

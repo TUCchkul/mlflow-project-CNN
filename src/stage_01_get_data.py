@@ -3,7 +3,7 @@ import os
 import shutil
 from tqdm import tqdm
 import logging
-from src.utils.common import read_yaml, create_directories
+from src.utils.common import read_yaml, create_directories, unzip_file
 import random
 import urllib.request as req
 
@@ -21,12 +21,12 @@ def main(config_path):
     ## read config files
     config = read_yaml(config_path)
     #print(config)#output->{'URL': {'source_url': 'https://download.microsoft.com/download/3/E/1/3E1C3F21-ECDB-4869-8368-6DEBA77B919F/kagglecatsanddogs_5340.zip', 'local_dir': 'data', 'data_file': 'data.zip'}}
-    URL=config["URL"]["source_url"]
+    URL=config["data"]["source_url"]
     #print(URL)#output->url link
-    local_dir=config["URL"]["local_dir"]
+    local_dir=config["data"]["local_dir"]
     #print(local_dir)# output->data
     create_directories([local_dir])
-    data_file=config["URL"]["data_file"]
+    data_file=config["data"]["data_file"]
     #print(data_file)#output->data.zip
     data_file_path=os.path.join(local_dir, data_file)
     #print(data_file_path)# output->data\data.zip
@@ -37,7 +37,11 @@ def main(config_path):
     else:
         logging.info(f"filename: {data_file} already present")
     #params = read_yaml(params_path)
-    pass
+    #unzip operations 
+    unzip_data_dir=config["data"]["unzip_data_dir"]
+    print(unzip_data_dir)
+    create_directories([unzip_data_dir])
+    unzip_file(source=data_file_path, dest=unzip_data_dir)
 
 
 if __name__ == '__main__':
